@@ -4,10 +4,9 @@ After=network.target
 
 [Service]
 Type=simple
-#TODO user
-User=nanodano
+User=root
 WorkingDirectory="{{ prometheus_server.path.install }}"
-ExecStart="{{ prometheus_server.path.install }}/prometheus --config.file=your_config.yml"
+ExecStart="{{ prometheus_server.path.install }}/prometheus --config.file={{ prometheus_server.path.config }}/prometheus.yml"
 Restart=on-abort
 
 [Install]

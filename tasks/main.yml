@@ -1,5 +1,14 @@
 ---
 
+- name
+
+- name: download and untar Golang 1.9.2
+  unarchive:
+    src:  "{{ golang.tarball_url }}"
+    dest: "{{ golang.directory }}"
+    copy: no
+    creates: "{{ golang.directory }}/bin/go"
+
 - name: Install Prometheus
   include: build.yml
   tags:

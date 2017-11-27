@@ -62,6 +62,7 @@
   command: "mv {{ prometheus_server.path.install }}/{{ prometheus_server.download_url.split('/')[-1].rsplit('.',2)[0] }} {{ prometheus_server.path.install }}/prometheus"
   when: download_tar.stat.exists == False
 
+#TODO check links
 - name: Create links for consoles and console libraries
   become: yes
   file:
