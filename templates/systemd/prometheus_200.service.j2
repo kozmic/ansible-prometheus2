@@ -1,0 +1,14 @@
+[Unit]
+Description=Prometheus 2.0.0 daemon
+After=network.target
+
+[Service]
+Type=simple
+#TODO user
+User=nanodano
+WorkingDirectory="{{ prometheus_server.path.install }}"
+ExecStart="{{ prometheus_server.path.install }}/prometheus --config.file=your_config.yml"
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

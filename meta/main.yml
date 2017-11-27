@@ -1,0 +1,29 @@
+---
+
+galaxy_info:
+  description: "Install Prometheus 2.0.0 Server."
+  author: Peter Ducai
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+    - name: Ubuntu
+      versions:
+        - xenial
+    - name: CentOS
+      versions:
+        - 7.4
+  categories:
+    - development
+
+galaxy_tags:
+  - monitoring
+  - prometheus
+
+dependencies:
+  - role: sansible.users_and_groups
+    users_and_groups:
+      groups:
+        - name: "{{ prometheus_server.group }}"
+      users:
+        - name: "{{ prometheus_server.user }}"
+          group: "{{ prometheus_server.group }}"
