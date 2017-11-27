@@ -2,7 +2,8 @@
 
 golang:
   version: 1.9.2
-  tarball_url: "https://redirector.gvt1.com/edgedl/go/go{{ golang.version }}.linux-amd64.tar.gz"
+  tarball: go{{ golang.version }}.linux-amd64.tar.gz
+  tarball_url: "https://redirector.gvt1.com/edgedl/go/{{ golang.tarball }}"
   directory: /usr/local
 
 prometheus_server:

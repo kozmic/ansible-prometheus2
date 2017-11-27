@@ -1,3 +1,52 @@
+global:
+  scrape_interval: 2m      # How frequently to scrape targets by default.
+  scrape_timeout: 25s      # How long until a scrape request times out.
+  evaluation_interval: 2m  # How frequently to evaluate rules.
+  external_labels:
+    monitor: somelabel
+
+# Rule files specifies a list of globs. Rules and alerts are read from
+# all matching files.
+rule_files:
+  - "my.rule"
+
+# A list of scrape configurations.
+scrape_configs:
+  [ - <scrape_config> ... ]
+
+# Alerting specifies settings related to the Alertmanager.
+alerting:
+  alert_relabel_configs:
+    [ - <relabel_config> ... ]
+  alertmanagers:
+    [ - <alertmanager_config> ... ]
+
+# Settings related to the experimental remote write feature.
+remote_write:
+  [ - <remote_write> ... ]
+
+# Settings related to the experimental remote read feature.
+remote_read:
+  [ - <remote_read> ... ]
+
+
+
+
+
+
+
+# Following is replacement for ./prometheus -alertmanager.url=http://alertmanager:9093/
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - alertmanager:9093
+
+
+
+
+
+
 # my global config
 global:
   scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
@@ -8,6 +57,7 @@ global:
   # external systems (federation, remote storage, Alertmanager).
   external_labels:
       monitor: '{{ prometheus_server.environment }}'
+
 
 {% if rules_list.matched > 0 %}
 rule_files:
@@ -27,3 +77,5 @@ scrape_configs:
     file_sd_configs:
       - files:
         - {{ prometheus_server.path.sd }}/*.json
+
+
