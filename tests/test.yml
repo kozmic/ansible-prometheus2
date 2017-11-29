@@ -1,5 +1,0 @@
----
-- hosts: 192.168.122.48
-  remote_user: daemonna
-  roles:
-    - ansible-prometheus2
