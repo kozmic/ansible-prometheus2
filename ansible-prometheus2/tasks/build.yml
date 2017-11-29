@@ -1,89 +1,89 @@
 ---
 
-- name: Create Prometheus Server directories
+- name: Create Prometheus2 Server directories
   become: yes
   file:
     path: "{{ item }}"
     state: directory
-    owner: "{{ prometheus_server.user }}"
-    group: "{{ prometheus_server.group }}"
+    owner: "{{ prometheus2_user }}"
+    group: "{{ prometheus2_group }}"
     mode: 0750
   with_items:
-    - "{{ prometheus_server.path.rule }}"
-    - "{{ prometheus_server.path.sd }}"
-    - "{{ prometheus_server.path.data }}"
-    - "{{ prometheus_server.path.install }}"
-    - "{{ prometheus_server.path.install }}/bin"
-    - "{{ prometheus_server.path.config }}"
-    - "{{ prometheus_server.path.log }}"
-    - "{{ prometheus_server.path.pid }}"
+    - "{{ prometheus2_rule }}"
+    - "{{ prometheus2_sd }}"
+    - "{{ prometheus2_data }}"
+    - "{{ prometheus2_install }}"
+    - "{{ prometheus2_install }}/bin"
+    - "{{ prometheus2_config }}"
+    - "{{ prometheus2_log }}"
+    - "{{ prometheus2_pid }}"
 
 - name: Copy wrapper shell script
   become: yes
   copy:
-    src: prometheus_wrapper
-    dest: "{{ prometheus_server.path.install }}/bin/prometheus_wrapper"
-    owner: "{{ prometheus_server.user }}"
-    group: "{{ prometheus_server.group }}"
+    src: prometheus2_wrapper
+    dest: "{{ prometheus2_install }}/bin/prometheus2_wrapper"
+    owner: "{{ prometheus2_user }}"
+    group: "{{ prometheus2_group }}"
     mode: 0755
 
 - stat:
-    path: "{{ prometheus_server.download_dest }}/{{ prometheus_server.download_url.split('/')[-1] }}"
+    path: "{{ prometheus2.download_dest }}/{{ prometheus2.download_url.split('/')[-1] }}"
   register: download_tar
 
-- name: Download Prometheus Server tarball
+- name: Download Prometheus2 Server tarball
   become: yes
   get_url:
-    url: "{{ prometheus_server.download_url }}"
-    dest: "{{ prometheus_server.download_dest }}"
-    checksum: "{{ prometheus_server.checksum }}"
+    url: "{{ prometheus2.download_url }}"
+    dest: "{{ prometheus2.download_dest }}"
+    checksum: "{{ prometheus2.checksum }}"
   when: download_tar.stat.exists == False
 
-- name: Untar Prometheus Server tarball
+- name: Untar Prometheus2 Server tarball
   become: yes
   unarchive:
-    src: "{{ prometheus_server.download_dest }}/{{ prometheus_server.download_url.split('/')[-1] }}"
-    dest: "{{ prometheus_server.path.install }}"
-    owner: "{{ prometheus_server.user }}"
-    group: "{{ prometheus_server.user }}"
+    src: "{{ prometheus2.download_dest }}/{{ prometheus2.download_url.split('/')[-1] }}"
+    dest: "{{ prometheus2_install }}"
+    owner: "{{ prometheus2.user }}"
+    group: "{{ prometheus2.user }}"
     remote_src: True
   when: download_tar.stat.exists == False
 
-- name: Ensure Prometheus Server directory does not exist
+- name: Ensure Prometheus2 Server directory does not exist
   become: yes
   file:
-    path: "{{ prometheus_server.path.install }}/prometheus/"
+    path: "{{ prometheus2_install }}/prometheus2/"
     state: absent
   when: download_tar.stat.exists == False
 
-- name: Move Prometheus Server directory to destination
+- name: Move Prometheus2 Server directory to destination
   become: yes
-  become_user: "{{ prometheus_server.user }}"
-  command: "mv {{ prometheus_server.path.install }}/{{ prometheus_server.download_url.split('/')[-1].rsplit('.',2)[0] }} {{ prometheus_server.path.install }}/prometheus"
+  become_user: "{{ prometheus2.user }}"
+  command: "mv {{ prometheus2_install }}/{{ prometheus2.download_url.split('/')[-1].rsplit('.',2)[0] }} {{ prometheus2_install }}/prometheus2"
   when: download_tar.stat.exists == False
 
 #TODO check links
 - name: Create links for consoles and console libraries
   become: yes
   file:
-    src: "{{ prometheus_server.path.install }}/prometheus/{{ item }}"
-    dest: "{{ prometheus_server.path.install }}/{{ item }}"
+    src: "{{ prometheus2_install }}/prometheus2/{{ item }}"
+    dest: "{{ prometheus2_install }}/{{ item }}"
     state: link
-    owner: "{{ prometheus_server.user }}"
-    group: "{{ prometheus_server.group }}"
+    owner: "{{ prometheus2.user }}"
+    group: "{{ prometheus2.group }}"
   with_items:
     - consoles
     - console_libraries
 
-- name: Make Prometheus Server a systemd service
+- name: Make Prometheus2 Server a systemd service
   become: yes
   template:
-    dest: /etc/systemd/system/prometheus_200.service
+    dest: /etc/systemd/system/prometheus2_200.service
     mode: 0755
-    src: systemd/prometheus_200.service.j2
+    src: systemd/prometheus2_200.service.j2
 
-- name: Make Prometheus Server service start on boot
+- name: Make Prometheus2 Server service start on boot
   become: yes
   service:
-    name: prometheus_200
+    name: prometheus2_200
     enabled: yes

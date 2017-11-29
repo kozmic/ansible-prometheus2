@@ -13,15 +13,15 @@
 
 - name: Download Golang 1.9.2
   get_url:
-    url: "{{ golang.tarball_url }}"
-    dest: "/tmp/{{ golang.tarball_url }}"
+    url: "{{ golang_tarball_url }}"
+    dest: "/tmp/{{ golang_tarball }}"
     checksum: sha256:de874549d9a8d8d8062be05808509c09a88a248e77ec14eb77453530829ac02b
       
 - name: Untar Golang 1.9.2
-  raw: "tar -xvfz /tmp/{{ golang.tarball }} -C {{ golang.directory }}"
+  raw: "tar -xvzf /tmp/{{ golang_tarball }} -C {{ golang_directory }}/"
 
 - name: Set GOPATH and GOROOT
-  raw: export something  # TODO: fix export
+  raw: export PATH=$PATH:/usr/local/go/bin && echo "export PATH=$PATH:/usr/local/go/bin" >> /etc/profile
 
 - name: Install Prometheus
   include: build.yml
