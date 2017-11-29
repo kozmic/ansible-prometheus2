@@ -1,0 +1,34 @@
+---
+
+- name: Create user and group for Prometheus 2.0
+  group:
+    name: prometheus
+    state: present
+
+- name: Create Prometheus user and group
+  user:
+    name: prometheus
+    comment: user for prometheus 2.0
+    group: prometheus
+
+- name: Download Golang 1.9.2
+  get_url:
+    url: "{{ golang.tarball_url }}"
+    dest: "/tmp/{{ golang.tarball_url }}"
+    checksum: sha256:de874549d9a8d8d8062be05808509c09a88a248e77ec14eb77453530829ac02b
+      
+- name: Untar Golang 1.9.2
+  raw: "tar -xvfz /tmp/{{ golang.tarball }} -C {{ golang.directory }}"
+
+- name: Set GOPATH and GOROOT
+  raw: export something  # TODO: fix export
+
+- name: Install Prometheus
+  include: build.yml
+  tags:
+    - build
+
+- name: Configure Prometheus
+  include: configure.yml
+  tags:
+    - configure

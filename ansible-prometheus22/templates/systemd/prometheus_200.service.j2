@@ -1,0 +1,13 @@
+[Unit]
+Description=Prometheus 2.0.0 daemon
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory="{{ prometheus_server.path.install }}"
+ExecStart="{{ prometheus_server.path.install }}/prometheus --config.file={{ prometheus_server.path.config }}/prometheus.yml"
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
