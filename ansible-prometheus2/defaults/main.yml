@@ -5,22 +5,16 @@ golang_tarball: "go{{ golang_version }}.linux-amd64.tar.gz"
 golang_tarball_url: "https://redirector.gvt1.com/edgedl/go/{{ golang_tarball }}"
 golang_directory: /usr/local
 
-# prometheus2:
-#   alertmanager:
-#     url: ~
-prometheus2_checksum: sha256:e12917b25b32980daee0e9cf879d9ec197e2893924bd1574604eb0f550034d46
-prometheus2_download_dest: /tmp
-prometheus2_download_url: https://github.com/prometheus/prometheus/releases/download/v2.0.0/prometheus-2.0.0.linux-amd64.tar.gz
-  #environment: dev
+prometheus2_version: 2.0.0
+prometheus2_tarball: prometheus-{{ prometheus2_version }}.linux-amd64.tar.gz
+prometheus2_tarball_url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus2_version }}/{{ prometheus2_tarball }}"
 prometheus2_group: prometheus
-  # opts: ~
-  # path:
-prometheus2_config: /opt/prometheus/config
-prometheus2_data: /opt/prometheus/data
-prometheus2_install: /opt/prometheus
-prometheus2_log: /opt/prometheus/log
-prometheus2_pid: /opt/prometheus/run
-prometheus2_rule: /opt/prometheus/rules
-prometheus2_sd: /opt/prometheus/tgroups
+prometheus2_directory: /opt/prometheus
+prometheus2_config: "{{ prometheus2_directory }}/config"
+prometheus2_data: "{{ prometheus2_directory }}/data"
+prometheus2_log: "{{ prometheus2_directory }}/log"
+prometheus2_pid: "{{ prometheus2_directory }}/run"
+prometheus2_rule: "{{ prometheus2_directory }}/rules"
+prometheus2_sd: "{{ prometheus2_directory }}/tgroups"
 prometheus2_user: prometheus
 
