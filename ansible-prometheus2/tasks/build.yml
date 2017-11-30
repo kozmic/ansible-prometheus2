@@ -35,6 +35,9 @@
     dest: /etc/systemd/system/prometheus2.service
     mode: 0755
 
+- name: Set system path for Prometheus2
+  raw: export PATH=$PATH:/opt/prometheus && echo "export PATH=$PATH:/opt/prometheus" >> /etc/profile
+
 - name: Make Prometheus2 Server service start on boot
   service:
     name: prometheus2
