@@ -8,7 +8,10 @@ golang_directory: /usr/local
 prometheus2_version: 2.0.0
 prometheus2_tarball: prometheus-{{ prometheus2_version }}.linux-amd64.tar.gz
 prometheus2_tarball_url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus2_version }}/{{ prometheus2_tarball }}"
+
 prometheus2_group: prometheus
+prometheus2_user: prometheus
+
 prometheus2_directory: /opt/prometheus
 prometheus2_config: "{{ prometheus2_directory }}/config"
 prometheus2_data: "{{ prometheus2_directory }}/data"
@@ -18,3 +21,7 @@ prometheus2_rule: "{{ prometheus2_directory }}/rules"
 prometheus2_sd: "{{ prometheus2_directory }}/tgroups"
 prometheus2_user: prometheus
 
+prometheus2_alerturl: localhost:9999
+prometheus2_serveropts: bla bla --bla
+
+prometheus2_serveropts: /tmp

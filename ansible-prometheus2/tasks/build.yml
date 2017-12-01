@@ -1,20 +1,20 @@
 ---
 
-# - name: Create Prometheus2 Server directories
-#   file:
-#     path: "{{ item }}"
-#     state: directory
-#     owner: "{{ prometheus2_user }}"
-#     group: "{{ prometheus2_group }}"
-#     mode: 0750
-#   with_items:
-#     - "{{ prometheus2_rule }}"
-#     - "{{ prometheus2_sd }}"
-#     - "{{ prometheus2_data }}"
-#     - "{{ prometheus2_directory}}"
-#     - "{{ prometheus2_config }}"
-#     - "{{ prometheus2_log }}"
-#     - "{{ prometheus2_pid }}"
+- name: Create Prometheus2 Server directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ prometheus2_user }}"
+    group: "{{ prometheus2_group }}"
+    mode: 0750
+  with_items:
+    - "{{ prometheus2_rule }}"
+    - "{{ prometheus2_sd }}"
+    - "{{ prometheus2_data }}"
+    - "{{ prometheus2_directory}}"
+    - "{{ prometheus2_config }}"
+    - "{{ prometheus2_log }}"
+    - "{{ prometheus2_pid }}"
 
 
 - name: Download Prometheus2 Server tarball
@@ -27,7 +27,7 @@
   raw: "tar -xvzf /tmp/{{ prometheus2_tarball }} -C /opt/"
 
 - name: Rename prometheus folder
-  raw: " mv /opt/prometheus-{{ prometheus2_version }}.linux-amd64 {{ prometheus2_directory }}"
+  raw: "rm -rf {{ prometheus2_directory }} && mv /opt/prometheus-{{ prometheus2_version }}.linux-amd64 {{ prometheus2_directory }}"
 
 - name: Make Prometheus2 Server a systemd service
   template:
