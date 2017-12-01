@@ -5,35 +5,7 @@ global:
   external_labels:
     monitor: somelabel
 
-# Rule files specifies a list of globs. Rules and alerts are read from
-# all matching files.
-rule_files:
-  - "my.rule"
-
-# A list of scrape configurations.
-scrape_configs:
-  [ - <scrape_config> ... ]
-
-# Alerting specifies settings related to the Alertmanager.
-alerting:
-  alert_relabel_configs:
-    [ - <relabel_config> ... ]
-  alertmanagers:
-    [ - <alertmanager_config> ... ]
-
-# Settings related to the experimental remote write feature.
-remote_write:
-  [ - <remote_write> ... ]
-
-# Settings related to the experimental remote read feature.
-remote_read:
-  [ - <remote_read> ... ]
-
-
-
-
-
-
+filename: '{{ prometheus2_directory }}'
 
 # Following is replacement for ./prometheus -alertmanager.url=http://alertmanager:9093/
 alerting:
@@ -41,10 +13,6 @@ alerting:
   - static_configs:
     - targets:
       - alertmanager:9093
-
-
-
-
 
 
 # my global config
@@ -56,7 +24,7 @@ global:
   # Attach these labels to any time series or alerts when communicating with
   # external systems (federation, remote storage, Alertmanager).
   external_labels:
-      monitor: '{{ prometheus_server.environment }}'
+      monitor: '{{ prometheus2_directory }}'
 
 
 {% if rules_list.matched > 0 %}
@@ -70,12 +38,12 @@ scrape_configs:
   # Static scrape of Prometheus itself
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: ['0.0.0.0:9090']
 
   # Service discovery configuration
   - job_name: "service_discovery"
     file_sd_configs:
       - files:
-        - {{ prometheus_server.path.sd }}/*.json
+        - {{ prometheus2_directory }}/*.json
 
 

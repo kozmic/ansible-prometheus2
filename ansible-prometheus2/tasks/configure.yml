@@ -13,14 +13,14 @@
     patterns: "*.rules"
   register: rules_list
 
-- name: Create Prometheus Server main config file
-  template:
-    src: prometheus.yml.j2
-    dest: "{{ prometheus2_directory }}/prometheus.yml"
-    validate: "{{ prometheus2_directory }}/promtool check-config %s"
+# - name: Create Prometheus Server main config file
+#   template:
+#     src: prometheus.yml.j2
+#     dest: "{{ prometheus2_directory }}/prometheus.yml"
+#     validate: "{{ prometheus2_directory }}/promtool check-config %s"
 
 - name: Start Prometheus Server
   become: yes
   service:
-    name: prometheus-server
+    name: prometheus2
     state: started
