@@ -1,21 +1,7 @@
 ---
 
-- name: Create Prometheus2 Server directories
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: "{{ prometheus2_user }}"
-    group: "{{ prometheus2_group }}"
-    mode: 0750
-  with_items:
-    - "{{ prometheus2_rule }}"
-    - "{{ prometheus2_sd }}"
-    - "{{ prometheus2_data }}"
-    - "{{ prometheus2_directory}}"
-    - "{{ prometheus2_config }}"
-    - "{{ prometheus2_log }}"
-    - "{{ prometheus2_pid }}"
-
+- name: Clean existing prometheus folder
+  shell: "rm -rf /opt/prometheus"
 
 - name: Download Prometheus2 Server tarball
   get_url:
@@ -24,10 +10,30 @@
     checksum: sha256:e12917b25b32980daee0e9cf879d9ec197e2893924bd1574604eb0f550034d46
 
 - name: Untar Prometheus2 Server tarball
-  raw: "tar -xvzf /tmp/{{ prometheus2_tarball }} -C /opt/"
+  shell: "tar -xvzf /tmp/{{ prometheus2_tarball }} -p -C /opt/"
 
 - name: Rename prometheus folder
-  raw: "rm -rf {{ prometheus2_directory }} && mv /opt/prometheus-{{ prometheus2_version }}.linux-amd64 {{ prometheus2_directory }}"
+  shell: "mv /opt/prometheus-{{ prometheus2_version }}.linux-amd64 {{ prometheus2_directory }}" #"  && chown root:root {{ prometheus2_directory }}/*" 
+
+
+- name: Create Prometheus2 Server directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ prometheus2_user }}"
+    group: "{{ prometheus2_group }}"
+    mode: 0750
+  tags:
+    - directory
+  with_items:
+    - "{{ prometheus2_directory }}"
+    - "{{ prometheus2_rule }}"
+    - "{{ prometheus2_sd }}"
+    - "{{ prometheus2_data }}"
+    - "{{ prometheus2_directory}}"
+    - "{{ prometheus2_config }}"
+    - "{{ prometheus2_log }}"
+    - "{{ prometheus2_pid }}"
 
 - name: Make Prometheus2 Server a systemd service
   template:
@@ -36,7 +42,7 @@
     mode: 0755
 
 - name: Set system path for Prometheus2
-  raw: export PATH=$PATH:/opt/prometheus && echo "export PATH=$PATH:/opt/prometheus" >> /etc/profile
+  shell: export PATH=$PATH:/opt/prometheus && echo "export PATH=$PATH:/opt/prometheus" >> /etc/profile
 
 - name: Make Prometheus2 Server service start on boot
   service:

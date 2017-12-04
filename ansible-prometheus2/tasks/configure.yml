@@ -1,7 +1,6 @@
 ---
 
 - name: Set Prometheus Server system defaults
-  become: yes
   template:
     dest: /etc/default/prometheus-server
     mode: 0644
@@ -20,7 +19,6 @@
 #     validate: "{{ prometheus2_directory }}/promtool check-config %s"
 
 - name: Start Prometheus Server
-  become: yes
   service:
     name: prometheus2
     state: started
