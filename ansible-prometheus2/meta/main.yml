@@ -2,15 +2,15 @@
 
 galaxy_info:
   description: "Install Prometheus 2.0.0 Server."
-  author: Peter Ducai
+  author: Peter Ducai (daemonna)
   license: MIT
   min_ansible_version: 2.4
   platforms:
     - name: Ubuntu
       versions:
         - xenial
-    - name: CentOS
-      versions:
-        - 7.4
+    # - name: CentOS
+    #   versions:
+    #     - 7.4
   categories:
     - development
